@@ -1,0 +1,21 @@
+docker run --name=postgresql -d -p 5432:5432 -e 'POSTGRES_USER=yuki' -e 'POSTGRES_PASSWORD=yuki' -e 'POSTGRES_DB=yukidb' yukihane/postgresql
+
+liquibase --driver=org.postgresql.Driver \
+      --classpath=postgresql-9.4.1209.jar \
+      --changeLogFile=./db.changelog.xml \
+      --url="jdbc:postgresql://localhost:5432/yukihanedb" \
+      --username=yukihane \
+      --password=yukihane \
+      generateChangeLog
+
+
+liquibase --driver=org.postgresql.Driver \
+      --classpath=postgresql-9.4.1209.jar \
+      --url="jdbc:postgresql://localhost:5432/yukihanedb" \
+      --username=yukihane \
+      --password=yukihane \
+diffChangeLog \
+      --referenceUrl="jdbc:postgresql://localhost:5432/yukihanedb_new" \
+      --referenceUsername=yukihane \
+      --referencePassword=yukihane
+
